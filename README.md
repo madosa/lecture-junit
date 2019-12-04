@@ -46,3 +46,16 @@
   - Window : https://steemit.com/kr/@mystarlight/docker
 
   - PowerShell : https://www.tabmode.com/windows10/powershell-to-command-prompt.html
+
+
+### 자료
+```
+Book
+JUnit in Action 단위 테스트의 모든 것 
+자바와 JUnit을 활용한 실용주의 단위 테스트
+
+Web
+https://countryxide.tistory.com/17
+https://www.slideshare.net/gyumee/ss-90206560
+https://javacan.tistory.com/entry/MocktestUsingMockito
+```

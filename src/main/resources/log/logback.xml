@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<configuration>
+		<include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+		<property name="SERVER_COMPONENT" value="lecture-junit"/>
+
+		<if condition='p("spring.profiles.active").equals("test")'>
+			<then>
+				<property name="LOG_LEVEL" value="DEBUG"/>
+				<property name="APACHE_LOG_LEVEL" value="DEBUG"/>
+				<property name="JSON_LOG_LEVEL" value="DEBUG"/>
+				<property name="MONGODB_LOG_LEVEL" value="DEBUG"/>
+				<property name="LOG_HOME" value="logs/${SERVER_COMPONENT}"/>
+			</then>
+		</if>
+		<if condition='p("spring.profiles.active").equals("local")'>
+			<then>
+				<property name="LOG_LEVEL" value="DEBUG"/>
+				<property name="APACHE_LOG_LEVEL" value="INFO"/>
+				<property name="JSON_LOG_LEVEL" value="DEBUG"/>
+				<property name="MONGODB_LOG_LEVEL" value="INFO"/>
+				<property name="LOG_HOME" value="logs/${SERVER_COMPONENT}"/>
+			</then>
+		</if>
+		<if condition='p("spring.profiles.active").equals("dev")'>
+			<then>
+				<property name="LOG_LEVEL" value="DEBUG"/>
+				<property name="APACHE_LOG_LEVEL" value="INFO"/>
+				<property name="JSON_LOG_LEVEL" value="INFO"/>
+				<property name="MONGODB_LOG_LEVEL" value="INFO"/>
+				<property name="LOG_HOME" value="logs/${SERVER_COMPONENT}"/>
+			</then>
+		</if>
+		<if condition='p("spring.profiles.active").equals("prd")'>
+			<then>
+				<property name="LOG_LEVEL" value="INFO"/>
+				<property name="APACHE_LOG_LEVEL" value="DEBUG"/>
+				<property name="JSON_LOG_LEVEL" value="WARN"/>
+				<property name="MONGODB_LOG_LEVEL" value="DEBUG"/>
+				<property name="LOG_HOME" value="/app/logs/${SERVER_COMPONENT}"/>
+			</then>
+		</if>
+
+		<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger] - %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<appender name="ERROUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${LOG_HOME}/service_error.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOG_HOME}/service_error.log.%d{yyyy-MM-dd}-%i</fileNamePattern>
+				<maxHistory>365</maxHistory>
+				<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<maxFileSize>1024MB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+				<pattern>
+					[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger] - %msg Client ReqStatus Info => requestId : %X{requestId} | requestIP : %X{remoteIP} | requestURI : %X{requestURI} | requestMethod : %X{requestMethod} | requestHeader : %X{headers} | requestBody : %X{body} | requestParams : %X{parameters} |%n
+				</pattern>
+			</encoder>
+			<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+				<level>ERROR</level>
+			</filter>
+		</appender>
+
+		<appender name="TRACEOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${LOG_HOME}/service_trace.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOG_HOME}/service_trace.log.%d{yyyy-MM-dd}-%i</fileNamePattern>
+				<maxHistory>365</maxHistory>
+				<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<maxFileSize>1024MB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}, %thread, %level, %logger{35}, %X{requestId}, %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<appender name="ACCESSOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${LOG_HOME}/service_access.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOG_HOME}/service_access.log.%d{yyyy-MM-dd}-%i</fileNamePattern>
+				<maxHistory>365</maxHistory>
+				<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<maxFileSize>1024MB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}, %thread, %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<appender name="ACCESS_STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<appender name="STDOUT_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="STDOUT"/>
+		</appender>
+
+		<appender name="TRACEOUT_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="TRACEOUT"/>
+		</appender>
+
+		<appender name="ACCESSOUT_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="ACCESSOUT"/>
+		</appender>
+
+		<appender name="ACCESS_STDOUT_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="ACCESS_STDOUT"/>
+		</appender>
+
+		<logger name="com.interpark.jukebox" level="${LOG_LEVEL}">
+			<appender-ref ref="TRACEOUT_ASYNC" />
+		</logger>
+		<logger name="com.interpark.jukebox.common.log.LogFilter" level="INFO" additivity="false">
+			<appender-ref ref="ACCESS_STDOUT_ASYNC"/>
+			<appender-ref ref="ACCESSOUT_ASYNC"/>
+		</logger>
+
+		<!-- Spring Framework -->
+		<logger name="org.springframework" level="INFO" />
+		<logger name="org.springframework.core" level="INFO" />
+		<logger name="org.springframework.beans" level="INFO" />
+		<logger name="org.springframework.context" level="INFO" />
+		<logger name="org.springframework.web" level="INFO" />
+
+		<!-- apache commons -->
+		<logger name="org.apache.commons" level="${APACHE_LOG_LEVEL}" />
+		<logger name="org.apache.http" level="${APACHE_LOG_LEVEL}" />
+		<logger name="org.apache.coyote.http11" level="${APACHE_LOG_LEVEL}" />
+		<logger name="org.apache.tomcat" level="${APACHE_LOG_LEVEL}" />
+		<logger name="org.apache.catalina" level="${APACHE_LOG_LEVEL}" />
+
+		<!-- JSON Object -->
+		<logger name="net.sf.json" level="${JSON_LOG_LEVEL}"/>
+
+		<!-- MongoDB Driver -->
+		<logger name="org.mongodb.driver" level="${MONGODB_LOG_LEVEL}"/>
+
+		<root level="${LOG_LEVEL}">
+			<appender-ref ref="STDOUT_ASYNC" />
+			<appender-ref ref="ERROUT" />
+		</root>
+	</configuration>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member.member">
+
+    <select id="selectMember" parameterType="map" resultType="com.interpark.lecture.junit.member.vo.MemberVO">
+        SELECT memberid, membername, gender, dateofbirth, email, mobile, createdate, modifydate
+          FROM member
+         WHERE 1 = 1
+        <if test="memberId != null">
+           AND memberid = #{memberId}
+        </if>
+
+    </select>
+
+    <insert id="insertMember" parameterType="com.interpark.lecture.junit.member.vo.MemberVO">
+        INSERT
+          INTO member
+            (
+                memberid, membername, gender, dateofbirth, email, mobile, createdate, modifydate
+            )
+        VALUES
+            (
+                #{memberId}, #{memberName}, #{gender}, #{dateOfBirth}, #{email}, #{mobile}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <update id="updateMember" parameterType="com.interpark.lecture.junit.member.vo.MemberVO">
+        UPDATE member
+        <set>
+            <if test="memberName != null">		membername		= #{memberName},    </if>
+            <if test="gender != null">		    gender		    = #{gender},        </if>
+            <if test="dateOfBirth != null">		dateofbirth	    = #{dateOfBirth},   </if>
+            <if test="email != null">		    email		    = #{email},         </if>
+            <if test="mobile != null">		    mobile		    = #{mobile},        </if>
+            <if test="modifyDate != null">		modifydate		= #{modifyDate}     </if>
+        </set>
+        WHERE memberid = #{memberId}
+    </update>
+
+    <delete id="deleteMember" parameterType="map">
+		DELETE
+		  FROM member
+		 WHERE memberid = #{memberId}
+    </delete>
+</mapper>

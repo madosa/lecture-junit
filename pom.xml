@@ -26,7 +26,7 @@
 		<ver.logback-ext-spring>0.1.5</ver.logback-ext-spring>
 		<ver.janino>3.0.12</ver.janino>
 		<ver.apache-httpclient>4.5.1</ver.apache-httpclient>
-		<ver.mysql-connector-java>8.0.17</ver.mysql-connector-java>
+		<ver.mysql-connector-java>8.0.28</ver.mysql-connector-java>
 		<ver.mybatis-spring-boot-starter>2.1.0</ver.mybatis-spring-boot-starter>
 		<ver.joda-time>2.10.3</ver.joda-time>
 		<ver.validation-api>2.0.1.Final</ver.validation-api>

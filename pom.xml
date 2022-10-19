@@ -18,7 +18,7 @@
 		<java.version>1.8</java.version>
 
 		<ver.json-lib>2.4</ver.json-lib>
-		<ver.jackson>2.9.9</ver.jackson>
+		<ver.jackson>2.13.4.1</ver.jackson>
 		<ver.jdom>2.0.6</ver.jdom>
 		<ver.swagger2>2.9.2</ver.swagger2>
 		<ver.aspectj>1.9.4</ver.aspectj>
